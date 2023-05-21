@@ -1,3 +1,4 @@
+// TODO: need to fix types checking
 import Text from '_atom/Text';
 import {optionsType} from '_constant/app';
 import useDebounce from '_hooks/useDebounce';

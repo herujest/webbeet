@@ -39,6 +39,8 @@ const InputField = ({
   inputFieldStyle,
   right,
   onPressLeftIcon,
+  error,
+  errorMessage = '',
   ...props
 }: IInputField) => {
   const {Gutters, Common, Layout} = useTheme();
@@ -81,6 +83,13 @@ const InputField = ({
     };
   }
 
+  if (error) {
+    inputStyle = {
+      ...inputStyle,
+      ...inputStyles.errorInput,
+    };
+  }
+
   if (disabled) {
     inputStyle.opacity = 0.5;
   }
@@ -104,6 +113,9 @@ const InputField = ({
         />
         {right}
       </View>
+      {error ? (
+        <Text text={errorMessage} style={[error && inputStyles.errorLabel]} />
+      ) : null}
     </View>
   );
 };

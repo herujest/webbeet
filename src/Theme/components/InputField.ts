@@ -22,6 +22,13 @@ export default function <C>({
       borderColor: Colors.primary[500],
       backgroundColor: Colors.neutral[200],
     },
+    errorLabel: {
+      ...Gutters.tinyVMargin,
+      color: Colors.danger[700],
+    },
+    errorInput: {
+      borderColor: Colors.danger[700],
+    },
     inputContainer: {
       ...Gutters.smallHPadding,
     },

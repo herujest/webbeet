@@ -6,12 +6,14 @@ import {InputField} from '_molecule/Input';
 import {Container} from '_organism/Basic';
 import {width} from '_theme/Layout';
 import React from 'react';
-import {Pressable, View} from 'react-native';
+import {BackHandler, Pressable, View} from 'react-native';
 import {KeyboardAwareFlatList} from 'react-native-keyboard-aware-scroll-view';
 import ModalDropdown from 'react-native-modal-dropdown';
 import {ItemPropDTO} from 'src/redux/reducers/product';
 import {uuidv4} from 'src/utils/helpers';
 import {RenderInputField} from './CustomInputField';
+import {CreatePageScreenProps} from 'src/utils/types';
+import NavigationService from 'src/navigators/NavigationService';
 
 const ListFooterComponent = ({
   onAddNewField,
@@ -96,7 +98,8 @@ const ListFooterComponent = ({
   );
 };
 
-const CreatePage = () => {
+const CreatePage = (props: CreatePageScreenProps) => {
+  const {navigation} = props;
   const dropdownRef = React.useRef<any>();
   const {Colors, Gutters} = useTheme();
 
@@ -106,6 +109,22 @@ const CreatePage = () => {
     value: '',
     type: optionsType[0].toUpperCase(),
   });
+
+  const _backAction = () => {
+    NavigationService.navigateBack();
+    return true;
+  };
+
+  React.useEffect(() => {
+    const handler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      _backAction,
+    );
+
+    return () => {
+      handler.remove();
+    };
+  }, [navigation]);
 
   const onSelect = React.useCallback((idx: number) => {
     const data = {
@@ -156,7 +175,7 @@ const CreatePage = () => {
 
   return (
     <Container>
-      <HeaderTitle title="Add New Category" />
+      <HeaderTitle title="Add New Category" onPressLeftIcon={_backAction} />
 
       <KeyboardAwareFlatList
         enableOnAndroid={true}
