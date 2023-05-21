@@ -6,6 +6,7 @@
 import {StyleSheet} from 'react-native';
 import buttonStyles from './components/Buttons';
 import headerStyles from './components/Headers';
+import inputStyles from './components/InputField';
 import {CommonParams} from './theme';
 
 export default function <C>({Colors, ...args}: CommonParams<C>) {
@@ -63,5 +64,6 @@ export default function <C>({Colors, ...args}: CommonParams<C>) {
       },
     }),
     header: headerStyles({Colors, ...args}),
+    inputStyles: inputStyles({Colors, ...args}),
   };
 }

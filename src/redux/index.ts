@@ -5,19 +5,13 @@ import {
   combineReducers,
   compose,
   legacy_createStore as createStore,
-  Reducer,
 } from 'redux';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import {persistReducer, PersistState, persistStore} from 'redux-persist';
 import thunk from 'redux-thunk';
 import app from './reducers';
-import {MainInitialStateType} from './reducers/main';
 
-interface MyState {
-  main: MainInitialStateType;
-}
-
-const mergedReducer: Reducer<MyState, AnyAction> = combineReducers({...app});
+const mergedReducer = combineReducers({...app});
 
 export type RootState = ReturnType<typeof mergedReducer> & {
   _persist: PersistState;
@@ -42,7 +36,7 @@ const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
   version: 0,
-  whitelist: ['main', 'theme', 'category'],
+  whitelist: ['main', 'theme', 'product'],
   timeout: 0,
 };
 

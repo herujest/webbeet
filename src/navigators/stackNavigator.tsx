@@ -27,18 +27,16 @@ export default function StackNavigator() {
         title: '',
         headerTitle: '',
       }}>
-      <Stack.Group>
-        {Screens.map((i, idx): JSX.Element => {
-          return (
-            <Stack.Screen
-              key={idx}
-              name={i.name}
-              component={i.component}
-              options={i.options}
-            />
-          );
-        })}
-      </Stack.Group>
+      {Screens.map((i, idx): JSX.Element => {
+        return (
+          <Stack.Screen
+            key={idx}
+            name={i.name}
+            component={i.component}
+            options={i.options}
+          />
+        );
+      })}
     </Stack.Navigator>
   );
 }

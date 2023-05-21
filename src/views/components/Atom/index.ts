@@ -53,7 +53,9 @@ export type IconName =
   | 'menu2'
   | 'menu3'
   | 'menu4'
-  | 'filter';
+  | 'filter'
+  | 'plus'
+  | 'minus';
 
 export interface IconMap {
   name: string;
@@ -75,7 +77,7 @@ export interface SvgIconProps {
 }
 export interface IIcon extends Omit<SvgIconProps, 'iconSet' | 'name' | 'size'> {
   name: IconName;
-  color?: string;
+  color?: string | any;
   size?: number;
   strokeWidth?: number;
   offset?: number;

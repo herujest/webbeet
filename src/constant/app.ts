@@ -10,3 +10,5 @@ export const bottomTabs = [
     loginRequired: true,
   },
 ];
+
+export const optionsType = ['Text', 'Date', 'Checkbox', 'Number'];

@@ -5,14 +5,13 @@ import {
 } from '@react-navigation/drawer';
 import React from 'react';
 import {RootDrawerParamList} from './screens';
-import StackNavigator from './stackNavigator';
 import TabNavigator from './tabNavigator';
 
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
 
 export default function DrawerNavigator() {
   // TODO: continue get list menu from redux
-  // const listItemMenu: any[] = useSelector(({category}) => category.categories);
+  // const listItemMenu: any[] = useSelector(({product}) => product.categories);
   // console.log('listItemMenu', listItemMenu);
 
   function ListMenuItem(props: any) {
@@ -35,7 +34,6 @@ export default function DrawerNavigator() {
         headerShown: false,
       }}>
       <Drawer.Screen name={'Tabs'} component={TabNavigator} />
-      <Drawer.Screen name={'Stacks'} component={StackNavigator} />
     </Drawer.Navigator>
   );
 }

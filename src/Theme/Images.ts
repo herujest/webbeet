@@ -4,6 +4,6 @@
 
 export default function () {
   return {
-    // [image_key_name] : image_source
+    emptyData: require('_assets/images/work-in-progress.png'),
   };
 }

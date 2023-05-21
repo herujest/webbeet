@@ -1,10 +1,10 @@
 import main from './main';
-import category from './category';
+import product from './product';
 import theme from './theme';
 
 const app = {
   main,
-  category,
+  product,
   theme,
 };
 

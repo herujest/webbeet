@@ -22,7 +22,7 @@ export const Colors = {
   outlineBase: '#262626',
   disabled: '#DADADA',
   text: '#212529',
-  buttonTitle: '#262626',
+  buttonTitle: '#fff',
   buttonTitleDisabled: '#585858',
   outlineProfile: '#5E44FF',
   statusOffline: '#727272',

@@ -5,7 +5,8 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import {ConnectedProps, connect} from 'react-redux';
 import NavigationService from './navigators/NavigationService';
-import DrawerNavigator from './navigators/drawerNavigator';
+import {RootStackParamList} from './navigators/screens';
+import StackNavigator from './navigators/stackNavigator';
 import {RootState} from './redux';
 import {setCurrentRouteName} from './redux/actions/main';
 
@@ -13,7 +14,7 @@ interface Props extends ReduxProps {}
 
 function App(props: Props) {
   const {_setCurrentRouteName} = props;
-  const navigationRef = useNavigationContainerRef();
+  const navigationRef = useNavigationContainerRef<RootStackParamList>();
   const routeNameRef = useRef<string | undefined>();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -41,7 +42,7 @@ function App(props: Props) {
         _setCurrentRouteName(currentRouteName);
         routeNameRef.current = currentRouteName;
       }}>
-      <DrawerNavigator />
+      <StackNavigator />
     </NavigationContainer>
   );
 }

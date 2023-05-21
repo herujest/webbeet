@@ -6,7 +6,6 @@ export default function <C>({Colors, Gutters, Layout}: CommonParams<C>) {
   const base = {
     ...Gutters.tinyVMargin,
     ...Gutters.tinyHMargin,
-    ...Layout.fill,
     ...Layout.rowCenter,
     borderRadius: MetricsSizes.xlarge,
   };
