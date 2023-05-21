@@ -2,6 +2,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from '_atom/Icon';
 import Text from '_atom/Text';
 import {IconName} from '_atom/index';
+import useDebounce from '_hooks/useDebounce';
 import useTheme from '_hooks/useTheme';
 import moment from 'moment';
 import React from 'react';
@@ -57,6 +58,16 @@ const InputField = ({
   const [isFocused, setIsFocused] = React.useState(false);
   const [showDate, setShowDate] = React.useState<boolean>(false);
   const [date, setDate] = React.useState(new Date());
+  const [tempValue, setTempValue] = React.useState<string | boolean>('');
+  const newValue = useDebounce(tempValue, 1000);
+
+  React.useEffect(() => {
+    setTempValue(value);
+  }, [value]);
+
+  React.useEffect(() => {
+    onChangeText && onChangeText(newValue);
+  }, [newValue]);
 
   let inputStyle: StyleProp<ViewStyle> = {};
   const handleBlur = React.useCallback(() => {
@@ -104,34 +115,16 @@ const InputField = ({
     inputStyle.opacity = 0.5;
   }
 
-  const InputBody = () => {
-    let Body = (
-      <TextInput
-        style={[inputStyle, inputStyles.inputContainer]}
-        onBlur={handleBlur}
-        onFocus={handleFocus}
-        onChangeText={onChangeText}
-        placeholder="Insert here"
-        {...props}
-      />
-    );
-
-    switch (inputMode) {
-      case 'NUMBER':
-        Body = (
-          <TextInput
-            style={[inputStyle, inputStyles.inputContainer]}
-            onBlur={handleBlur}
-            onFocus={handleFocus}
-            onChangeText={onChangeText}
-            placeholder="Insert here"
-            keyboardType="number-pad"
-            {...props}
-          />
-        );
-        break;
-      case 'DATE':
-        Body = (
+  return (
+    <View style={inputFieldStyle}>
+      {label ? <Text text={label} size="base" variant="semibold" /> : null}
+      <View style={[Layout.row]}>
+        {leftIcon && (
+          <Pressable onPress={onPressLeftIcon} style={inputStyles.iconBox}>
+            <Icon name={leftIcon} color={iconColor} />
+          </Pressable>
+        )}
+        {inputMode === 'DATE' ? (
           <Pressable
             onPress={() => {
               setShowDate(true);
@@ -159,45 +152,27 @@ const InputField = ({
               />
             ) : null}
           </Pressable>
-        );
-        break;
-      case 'CHECKBOX':
-        Body = (
+        ) : inputMode === 'CHECKBOX' ? (
           <Switch
             thumbColor={Colors.white}
             trackColor={{false: Colors.neutral[300], true: Colors.primary[700]}}
             onValueChange={val => onChangeText && onChangeText(val)}
             value={value}
           />
-        );
-        break;
-      default:
-        Body = (
+        ) : (
           <TextInput
             style={[inputStyle, inputStyles.inputContainer]}
             onBlur={handleBlur}
             onFocus={handleFocus}
-            onChangeText={onChangeText}
+            onChangeText={val => {
+              setTempValue(val);
+            }}
             placeholder="Insert here"
+            keyboardType={inputMode === 'NUMBER' ? 'number-pad' : 'default'}
+            value={tempValue}
             {...props}
           />
-        );
-        break;
-    }
-
-    return Body;
-  };
-
-  return (
-    <View style={inputFieldStyle}>
-      {label ? <Text text={label} size="base" variant="semibold" /> : null}
-      <View style={[Layout.row]}>
-        {leftIcon && (
-          <Pressable onPress={onPressLeftIcon} style={inputStyles.iconBox}>
-            <Icon name={leftIcon} color={iconColor} />
-          </Pressable>
         )}
-        {InputBody()}
         {right}
       </View>
       {error ? (
