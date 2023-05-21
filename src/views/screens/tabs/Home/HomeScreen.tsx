@@ -40,9 +40,7 @@ const mapStateToProps = ({product}: RootState) => ({
   mainCategories: product.mainCategories,
 });
 
-const mapDispatchToProps = {
-  _setCategory: setCategory,
-};
+const mapDispatchToProps = {};
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 

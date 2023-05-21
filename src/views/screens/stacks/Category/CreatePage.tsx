@@ -1,3 +1,4 @@
+import {setCategory} from '_actions/product';
 import {Icon, Text} from '_atom/index';
 import {optionsType} from '_constant/app';
 import useTheme from '_hooks/useTheme';
@@ -9,11 +10,13 @@ import React from 'react';
 import {BackHandler, Pressable, View} from 'react-native';
 import {KeyboardAwareFlatList} from 'react-native-keyboard-aware-scroll-view';
 import ModalDropdown from 'react-native-modal-dropdown';
-import {ItemPropDTO} from 'src/redux/reducers/product';
-import {uuidv4} from 'src/utils/helpers';
-import {RenderInputField} from './CustomInputField';
-import {CreatePageScreenProps} from 'src/utils/types';
+import {ConnectedProps, connect} from 'react-redux';
 import NavigationService from 'src/navigators/NavigationService';
+import {RootState} from 'src/redux';
+import {ItemPropDTO, MainCategoryDTO} from 'src/redux/reducers/product';
+import {uuidv4} from 'src/utils/helpers';
+import {CreatePageScreenProps} from 'src/utils/types';
+import {RenderInputField} from './CustomInputField';
 
 const ListFooterComponent = ({
   onAddNewField,
@@ -98,8 +101,8 @@ const ListFooterComponent = ({
   );
 };
 
-const CreatePage = (props: CreatePageScreenProps) => {
-  const {navigation} = props;
+const CreatePage = (props: CreatePageScreenProps & ReduxProps) => {
+  const {navigation, _setCategory} = props;
   const dropdownRef = React.useRef<any>();
   const {Colors, Gutters} = useTheme();
 
@@ -117,7 +120,12 @@ const CreatePage = (props: CreatePageScreenProps) => {
       setInvalidCatName(true);
     } else {
       NavigationService.navigateBack();
-      console.log('save');
+      const payload: MainCategoryDTO = {
+        id: uuidv4(),
+        name: categoryName,
+        properties: tempItemProp.filter(i => i.value),
+      };
+      _setCategory(payload);
     }
     return true;
   };
@@ -232,4 +240,15 @@ const CreatePage = (props: CreatePageScreenProps) => {
   );
 };
 
-export default CreatePage;
+const mapStateToProps = ({product}: RootState) => ({
+  mainCategories: product.mainCategories,
+});
+
+const mapDispatchToProps = {
+  _setCategory: setCategory,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type ReduxProps = ConnectedProps<typeof connector>;
+export default connector(CreatePage);

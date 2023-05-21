@@ -50,21 +50,24 @@ export const RenderInputField = ({
     dropdownRef.current.show();
   }, []);
 
-  const onSelect = React.useCallback((idx: number) => {
-    const data = {
-      id: '',
-      value: '',
-      type: optionsType[idx].toUpperCase(),
-    };
-    setEditableItem(data);
-    setCurrentType(data?.type);
-    onChangeValue({
-      ...editableItem,
-      type: data?.type,
-    });
+  const onSelect = React.useCallback(
+    (idx: number) => {
+      const data = {
+        id: editableItem?.id,
+        value: value || editableItem.value,
+        type: optionsType[idx].toUpperCase(),
+      };
+      setEditableItem(data);
+      setCurrentType(data?.type);
+      onChangeValue({
+        ...editableItem,
+        type: data?.type,
+      });
 
-    dropdownRef.current.hide();
-  }, []);
+      dropdownRef.current.hide();
+    },
+    [editableItem],
+  );
 
   return (
     <View style={{backgroundColor: Colors.white}}>

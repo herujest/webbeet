@@ -14,6 +14,7 @@ export type ItemPropDTO = {
 };
 
 export type MainCategoryDTO = {
+  id: string;
   name: string;
   properties: ItemPropDTO[];
 };
@@ -32,7 +33,7 @@ export default (
 ) => {
   switch (type) {
     case TYPES.PRODUCT.SET_CATEGORY:
-      return {...state, mainCategories: [...state.mainCategories, ...payload]};
+      return {...state, mainCategories: [...state.mainCategories, payload]};
 
     default:
       return state;
