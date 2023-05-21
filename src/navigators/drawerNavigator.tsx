@@ -6,18 +6,29 @@ import {
 import React from 'react';
 import {RootDrawerParamList} from './screens';
 import TabNavigator from './tabNavigator';
+import {useSelector} from 'react-redux';
+import {MainCategoryDTO} from 'src/redux/reducers/product';
 
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
 
 export default function DrawerNavigator() {
-  // TODO: continue get list menu from redux
-  // const listItemMenu: any[] = useSelector(({product}) => product.categories);
-  // console.log('listItemMenu', listItemMenu);
+  const listItemMenu: any[] = useSelector(
+    ({product}) => product.mainCategories,
+  );
 
   function ListMenuItem(props: any) {
     return (
       <DrawerContentScrollView {...props}>
         <DrawerItem label="Help" onPress={() => console.log('pressed')} />
+        {listItemMenu?.map((category: MainCategoryDTO, index: number) => {
+          return (
+            <DrawerItem
+              key={index}
+              label={category?.name}
+              onPress={() => console.log('pressed')}
+            />
+          );
+        })}
       </DrawerContentScrollView>
     );
   }

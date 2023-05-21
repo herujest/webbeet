@@ -29,6 +29,7 @@ const HomeScreen = (props: Props) => {
         renderItem={({item, index}: {item: MainCategoryDTO; index: number}) => {
           return <CategoryWrapper key={index} category={item} />;
         }}
+        contentContainerStyle={Gutters.smallPadding}
         ListEmptyComponent={EmptyCategory}
         keyExtractor={(item, index) => index.toString()}
       />

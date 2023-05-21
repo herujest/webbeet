@@ -30,17 +30,18 @@ export const ButtonBody = ({
   iconPosition = 'left',
   iconSize,
   iconColor,
+  buttonBodyStyle = {paddingHorizontal: 30},
 }: IButtonBody) => {
   const {Layout, Gutters, Fonts, Colors} = useTheme();
   const iconPos = iconPosition === 'right' ? Layout.rowReverse : Layout.row;
 
   return (
-    <View style={[Layout.rowCenter, iconPos, {paddingHorizontal: 30}]}>
+    <View style={[Layout.rowCenter, iconPos, buttonBodyStyle]}>
       {icon ? (
         <View style={Gutters.smallHMargin}>
           <Icon
             name={icon}
-            size={iconSize ? iconSize : titleSize}
+            // size={iconSize ? iconSize : titleSize}
             color={iconColor ? iconColor : Colors.buttonTitle}
           />
         </View>

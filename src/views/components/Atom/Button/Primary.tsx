@@ -39,7 +39,7 @@ const Primary = ({
       {loading ? (
         <ActivityIndicator size="small" color={Colors.white} />
       ) : (
-        <ButtonBody {...props} title={title} titleSize={titleSize} />
+        <ButtonBody title={title} titleSize={titleSize} {...props} />
       )}
     </TouchableOpacity>
   );

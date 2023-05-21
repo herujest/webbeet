@@ -1,5 +1,10 @@
 import Variables from '_theme/Variables';
-import {StyleProp, TextStyle, TouchableOpacityProps} from 'react-native';
+import {
+  StyleProp,
+  TextStyle,
+  TouchableOpacityProps,
+  ViewStyle,
+} from 'react-native';
 import {IconName, TFontSizes} from '../index';
 import Button from './Button';
 
@@ -31,6 +36,7 @@ export interface IButtonBody extends IButton {
   iconColor?: string;
   buttonActive?: boolean;
   titleStyle?: StyleProp<TextStyle>;
+  buttonBodyStyle?: StyleProp<ViewStyle>;
 }
 
 export interface IButtonIcon extends TouchableOpacityProps {
