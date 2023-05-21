@@ -35,6 +35,14 @@ export default (
   switch (type) {
     case TYPES.PRODUCT.SET_CATEGORY:
       return {...state, mainCategories: [...state.mainCategories, payload]};
+    case TYPES.PRODUCT.DELETE_CATEGORY:
+      const indexCtgr = state.mainCategories.findIndex(i => i.id === payload);
+      const updatedCategories = [
+        ...state.mainCategories.slice(0, indexCtgr),
+        ...state.mainCategories.slice(indexCtgr + 1),
+      ];
+
+      return {...state, mainCategories: updatedCategories};
     case TYPES.PRODUCT.ADD_CATEGORY_ITEM:
       const modifiedMainCategories = state.mainCategories.map(
         (i: MainCategoryDTO) => {
