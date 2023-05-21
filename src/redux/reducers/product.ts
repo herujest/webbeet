@@ -31,7 +31,7 @@ export default (
   {type, payload}: {type: string; payload: any},
 ) => {
   switch (type) {
-    case TYPES.CATEGORY.SET_CATEGORY:
+    case TYPES.PRODUCT.SET_CATEGORY:
       return {...state, mainCategories: [...state.mainCategories, ...payload]};
 
     default:

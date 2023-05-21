@@ -26,6 +26,8 @@ interface IInputField extends TextInputProps {
   inputFieldStyle?: StyleProp<ViewStyle>;
   right?: React.ReactNode;
   onPressLeftIcon?: () => void;
+  error?: boolean;
+  errorMessage?: string;
 }
 const InputField = ({
   label,

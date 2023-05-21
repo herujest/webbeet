@@ -5,7 +5,7 @@ export const TYPES = {
     CHANGE_THEME: 'CHANGE_THEME',
     SET_DEFAULT_THEME: 'SET_DEFAULT_THEME',
   },
-  CATEGORY: {
+  PRODUCT: {
     SET_CATEGORY: 'SET_CATEGORY',
   },
 };

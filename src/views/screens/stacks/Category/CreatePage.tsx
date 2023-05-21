@@ -103,6 +103,8 @@ const CreatePage = (props: CreatePageScreenProps) => {
   const dropdownRef = React.useRef<any>();
   const {Colors, Gutters} = useTheme();
 
+  const [categoryName, setCategoryName] = React.useState<string>('');
+  const [invalidCatName, setInvalidCatName] = React.useState<boolean>('');
   const [tempItemProp, setTempItemProp] = React.useState<ItemPropDTO[]>([]);
   const [currentType, setCurrentType] = React.useState<ItemPropDTO>({
     id: uuidv4(),
@@ -111,7 +113,12 @@ const CreatePage = (props: CreatePageScreenProps) => {
   });
 
   const _backAction = () => {
-    NavigationService.navigateBack();
+    if (tempItemProp.length && !categoryName) {
+      setInvalidCatName(true);
+    } else {
+      NavigationService.navigateBack();
+      console.log('save');
+    }
     return true;
   };
 
@@ -184,7 +191,16 @@ const CreatePage = (props: CreatePageScreenProps) => {
         enableAutomaticScroll
         ListHeaderComponent={
           <View style={[Gutters.smallPadding, {backgroundColor: Colors.white}]}>
-            <InputField label="Category Name" />
+            <InputField
+              label="Category Name"
+              value={categoryName}
+              error={invalidCatName}
+              errorMessage={'Category Name is required'}
+              onChangeText={val => {
+                setCategoryName(val);
+                setInvalidCatName(false);
+              }}
+            />
           </View>
         }
         contentContainerStyle={[Gutters.smallVPadding]}
