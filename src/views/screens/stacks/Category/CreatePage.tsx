@@ -108,7 +108,13 @@ const CreatePage = (props: CreatePageScreenProps & ReduxProps) => {
 
   const [categoryName, setCategoryName] = React.useState<string>('');
   const [invalidCatName, setInvalidCatName] = React.useState<boolean>('');
-  const [tempItemProp, setTempItemProp] = React.useState<ItemPropDTO[]>([]);
+  const [tempItemProp, setTempItemProp] = React.useState<ItemPropDTO[]>([
+    {
+      id: uuidv4(),
+      value: '',
+      type: 'TEXT',
+    },
+  ]);
   const [currentType, setCurrentType] = React.useState<ItemPropDTO>({
     id: uuidv4(),
     value: '',
@@ -116,16 +122,18 @@ const CreatePage = (props: CreatePageScreenProps & ReduxProps) => {
   });
 
   const _backAction = () => {
-    if (tempItemProp.length && !categoryName) {
+    if (tempItemProp.length > 1 && !categoryName) {
       setInvalidCatName(true);
     } else {
+      if (categoryName) {
+        const payload: MainCategoryDTO = {
+          id: uuidv4(),
+          name: categoryName,
+          properties: tempItemProp,
+        };
+        _setCategory(payload);
+      }
       NavigationService.navigateBack();
-      const payload: MainCategoryDTO = {
-        id: uuidv4(),
-        name: categoryName,
-        properties: tempItemProp.filter(i => i.value),
-      };
-      _setCategory(payload);
     }
     return true;
   };
@@ -213,7 +221,7 @@ const CreatePage = (props: CreatePageScreenProps & ReduxProps) => {
         }
         contentContainerStyle={[Gutters.smallVPadding]}
         data={tempItemProp}
-        extraData={[tempItemProp]}
+        extraData={[tempItemProp, categoryName]}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item, index}) => {
           return (
@@ -224,6 +232,7 @@ const CreatePage = (props: CreatePageScreenProps & ReduxProps) => {
               onChangeValue={(modifiedData: ItemPropDTO) => {
                 onChangeValueItem(modifiedData, item.id);
               }}
+              defaultValue={item?.value}
             />
           );
         }}
