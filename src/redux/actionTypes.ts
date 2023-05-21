@@ -7,5 +7,6 @@ export const TYPES = {
   },
   PRODUCT: {
     SET_CATEGORY: 'SET_CATEGORY',
+    ADD_CATEGORY_ITEM: 'ADD_CATEGORY_ITEM',
   },
 };

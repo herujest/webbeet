@@ -55,7 +55,8 @@ export type IconName =
   | 'menu4'
   | 'filter'
   | 'plus'
-  | 'minus';
+  | 'minus'
+  | 'three-dots-vertical';
 
 export interface IconMap {
   name: string;

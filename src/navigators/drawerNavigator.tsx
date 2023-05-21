@@ -19,7 +19,10 @@ export default function DrawerNavigator() {
   function ListMenuItem(props: any) {
     return (
       <DrawerContentScrollView {...props}>
-        <DrawerItem label="Help" onPress={() => console.log('pressed')} />
+        <DrawerItem
+          label="Dashboard"
+          onPress={() => props.navigation?.closeDrawer()}
+        />
         {listItemMenu?.map((category: MainCategoryDTO, index: number) => {
           return (
             <DrawerItem

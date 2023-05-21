@@ -1,11 +1,13 @@
-import {setCategory} from '_actions/product';
+import {Button} from '_atom/Button';
 import useTheme from '_hooks/useTheme';
 import {HeaderTitle} from '_molecule/Header';
 import {Container} from '_organism/Basic';
 import CategoryWrapper from '_organism/Layout/CategoryWrapper';
+import {width} from '_theme/Layout';
 import React from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, View} from 'react-native';
 import {ConnectedProps, connect} from 'react-redux';
+import NavigationService from 'src/navigators/NavigationService';
 import {RootState} from 'src/redux';
 import {MainCategoryDTO} from 'src/redux/reducers/product';
 import {HomeScreenProps} from 'src/utils/types';
@@ -15,7 +17,7 @@ type Props = ReduxProps & HomeScreenProps;
 
 const HomeScreen = (props: Props) => {
   const {mainCategories} = props;
-  const {Gutters} = useTheme();
+  const {Gutters, Colors, Layout} = useTheme();
 
   return (
     <Container>
@@ -32,6 +34,27 @@ const HomeScreen = (props: Props) => {
         contentContainerStyle={Gutters.smallPadding}
         ListEmptyComponent={EmptyCategory}
         keyExtractor={(item, index) => index.toString()}
+        ListFooterComponent={
+          mainCategories.length ? (
+            <View style={[Layout.center]}>
+              <View
+                style={[
+                  Gutters.largeTMargin,
+                  {
+                    width: width * 0.8,
+                    height: 0.5,
+                    backgroundColor: Colors.neutral[300],
+                  },
+                ]}
+              />
+              <Button
+                title="Create New Category"
+                onPress={() => NavigationService.navigate('CreatePage')}
+                style={Gutters.largeVMargin}
+              />
+            </View>
+          ) : null
+        }
       />
     </Container>
   );

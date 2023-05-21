@@ -1,6 +1,8 @@
 import {NativeStackNavigationOptions} from '@react-navigation/native-stack';
+import {MainCategoryDTO} from 'src/redux/reducers/product';
 import {HomeScreenProps, ManageCategoryScreenProps} from 'src/utils/types';
 import {CreatePage} from 'src/views/screens/stacks';
+import {CreateItemCategory} from 'src/views/screens/stacks/Category';
 import DrawerNavigator from './drawerNavigator';
 
 interface INavigationOption {
@@ -24,12 +26,20 @@ const MainScreen: Array<INavigationOption> = [
       headerShown: false,
     },
   },
+  {
+    name: 'CreateItemCategory',
+    component: CreateItemCategory,
+    options: {
+      headerShown: false,
+    },
+  },
 ];
 
 export const Screens = [...MainScreen];
 
 export type RootStackParamList = {
   CreatePage: undefined;
+  CreateItemCategory: {categoryConfig: MainCategoryDTO};
 };
 
 export type RootDrawerParamList = {

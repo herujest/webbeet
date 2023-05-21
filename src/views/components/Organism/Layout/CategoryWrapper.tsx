@@ -5,12 +5,27 @@ import useTheme from '_hooks/useTheme';
 import {width} from '_theme/Layout';
 import Text from '_atom/Text';
 import {Button} from '_atom/Button';
+import NavigationService from 'src/navigators/NavigationService';
+
+const RenderEmptyItem = () => {
+  const {Gutters, Colors, Layout} = useTheme();
+
+  return (
+    <View style={[Layout.center, Gutters.largePadding]}>
+      <Text text="No Item to displays" />
+    </View>
+  );
+};
 
 const CategoryWrapper = ({category}: {category: MainCategoryDTO}) => {
   const {Gutters, Colors, Layout} = useTheme();
 
+  React.useEffect(() => {
+    console.log('category', category);
+  }, [category]);
+
   return (
-    <View>
+    <View style={Gutters.smallBMargin}>
       <View
         style={[
           Layout.row,
@@ -37,10 +52,35 @@ const CategoryWrapper = ({category}: {category: MainCategoryDTO}) => {
           style={[Gutters.smallHPadding, {padding: 0}]}
           titleSize={'sm'}
           buttonBodyStyle={Gutters.smallRPadding}
+          onPress={onAddNewItem}
         />
+      </View>
+      <View
+        style={{
+          borderBottomLeftRadius: width * 0.03,
+          borderBottomRightRadius: width * 0.03,
+          backgroundColor: Colors.white,
+        }}>
+        {category?.items?.length ? (
+          category?.items?.map(i => {
+            return (
+              <View>
+                <Text text="name" />
+              </View>
+            );
+          })
+        ) : (
+          <RenderEmptyItem />
+        )}
       </View>
     </View>
   );
+
+  function onAddNewItem() {
+    NavigationService.navigate('CreateItemCategory', {
+      categoryConfig: category,
+    });
+  }
 };
 
 export default CategoryWrapper;

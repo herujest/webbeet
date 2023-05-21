@@ -1,24 +1,27 @@
+import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from '_atom/Icon';
 import Text from '_atom/Text';
 import {IconName} from '_atom/index';
 import useTheme from '_hooks/useTheme';
+import moment from 'moment';
 import React from 'react';
 import {
-  KeyboardAvoidingView,
   Pressable,
   StyleProp,
+  Switch,
   TextInput,
   TextInputProps,
   View,
   ViewStyle,
 } from 'react-native';
+import {CategoryPropertyDTO} from 'src/redux/reducers/product';
 
 interface IInputField extends TextInputProps {
   label?: string;
   type?: 'default' | 'bordered' | 'stackedLabel' | 'borderBottomOnly';
   onFocus?: () => void;
   onBlur?: () => void;
-  onChangeText?: (text: string) => void;
+  onChangeText?: (text: string | boolean) => void;
   style?: StyleProp<ViewStyle>;
   disabled?: boolean;
   leftIcon?: IconName;
@@ -28,6 +31,7 @@ interface IInputField extends TextInputProps {
   onPressLeftIcon?: () => void;
   error?: boolean;
   errorMessage?: string;
+  inputMode?: CategoryPropertyDTO;
 }
 const InputField = ({
   label,
@@ -43,12 +47,16 @@ const InputField = ({
   onPressLeftIcon,
   error,
   errorMessage = '',
+  inputMode,
+  value,
   ...props
 }: IInputField) => {
-  const {Gutters, Common, Layout} = useTheme();
+  const {Gutters, Common, Layout, Colors} = useTheme();
   const {inputStyles} = Common;
 
   const [isFocused, setIsFocused] = React.useState(false);
+  const [showDate, setShowDate] = React.useState<boolean>(false);
+  const [date, setDate] = React.useState(new Date());
 
   let inputStyle: StyleProp<ViewStyle> = {};
   const handleBlur = React.useCallback(() => {
@@ -96,6 +104,90 @@ const InputField = ({
     inputStyle.opacity = 0.5;
   }
 
+  const InputBody = () => {
+    let Body = (
+      <TextInput
+        style={[inputStyle, inputStyles.inputContainer]}
+        onBlur={handleBlur}
+        onFocus={handleFocus}
+        onChangeText={onChangeText}
+        placeholder="Insert here"
+        {...props}
+      />
+    );
+
+    switch (inputMode) {
+      case 'NUMBER':
+        Body = (
+          <TextInput
+            style={[inputStyle, inputStyles.inputContainer]}
+            onBlur={handleBlur}
+            onFocus={handleFocus}
+            onChangeText={onChangeText}
+            placeholder="Insert here"
+            keyboardType="number-pad"
+            {...props}
+          />
+        );
+        break;
+      case 'DATE':
+        Body = (
+          <Pressable
+            onPress={() => {
+              setShowDate(true);
+              // showDatePicker();
+            }}
+            style={(inputStyles.inputContainer, {width: '100%'})}>
+            <TextInput
+              style={[
+                inputStyle,
+                inputStyles.inputContainer,
+                {color: Colors.neutral[500]},
+              ]}
+              value={moment(date).format('YYYY-MM-DD')}
+              placeholder="YYYY-MM-DD"
+              editable={false}
+              {...props}
+            />
+            {showDate ? (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode={'date'}
+                is24Hour={true}
+                onChange={onChange}
+              />
+            ) : null}
+          </Pressable>
+        );
+        break;
+      case 'CHECKBOX':
+        Body = (
+          <Switch
+            thumbColor={Colors.white}
+            trackColor={{false: Colors.neutral[300], true: Colors.primary[700]}}
+            onValueChange={val => onChangeText && onChangeText(val)}
+            value={value}
+          />
+        );
+        break;
+      default:
+        Body = (
+          <TextInput
+            style={[inputStyle, inputStyles.inputContainer]}
+            onBlur={handleBlur}
+            onFocus={handleFocus}
+            onChangeText={onChangeText}
+            placeholder="Insert here"
+            {...props}
+          />
+        );
+        break;
+    }
+
+    return Body;
+  };
+
   return (
     <View style={inputFieldStyle}>
       {label ? <Text text={label} size="base" variant="semibold" /> : null}
@@ -105,14 +197,7 @@ const InputField = ({
             <Icon name={leftIcon} color={iconColor} />
           </Pressable>
         )}
-        <TextInput
-          style={[inputStyle, inputStyles.inputContainer]}
-          onBlur={handleBlur}
-          onFocus={handleFocus}
-          onChangeText={onChangeText}
-          placeholder="Insert here"
-          {...props}
-        />
+        {InputBody()}
         {right}
       </View>
       {error ? (
@@ -120,6 +205,13 @@ const InputField = ({
       ) : null}
     </View>
   );
+
+  function onChange(event, selectedDate) {
+    const currentDate = selectedDate;
+    setDate(currentDate);
+    setShowDate(false);
+    onChangeText && onChangeText(moment(currentDate).format('YYYY-MM-DD'));
+  }
 };
 
 export default InputField;
