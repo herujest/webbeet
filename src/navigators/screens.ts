@@ -2,7 +2,11 @@ import {NativeStackNavigationOptions} from '@react-navigation/native-stack';
 import {MainCategoryDTO} from 'src/redux/reducers/product';
 import {HomeScreenProps, ManageCategoryScreenProps} from 'src/utils/types';
 import {CreatePage} from 'src/views/screens/stacks';
-import {CreateItemCategory, EditPage} from 'src/views/screens/stacks/Category';
+import {
+  CreateItemCategory,
+  EditItemCategory,
+  EditPage,
+} from 'src/views/screens/stacks/Category';
 import DrawerNavigator from './drawerNavigator';
 
 interface INavigationOption {
@@ -40,6 +44,13 @@ const MainScreen: Array<INavigationOption> = [
       headerShown: false,
     },
   },
+  {
+    name: 'EditItemCategory',
+    component: EditItemCategory,
+    options: {
+      headerShown: false,
+    },
+  },
 ];
 
 export const Screens = [...MainScreen];
@@ -47,6 +58,7 @@ export const Screens = [...MainScreen];
 export type RootStackParamList = {
   CreatePage: undefined;
   CreateItemCategory: {categoryConfig: MainCategoryDTO};
+  EditItemCategory: {categoryConfig: MainCategoryDTO; editableItem: any};
   EditPage: {category: MainCategoryDTO};
 };
 

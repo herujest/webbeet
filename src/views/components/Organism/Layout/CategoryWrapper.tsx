@@ -1,17 +1,17 @@
-import {FlatList, Pressable, TouchableOpacity, View} from 'react-native';
-import React from 'react';
-import {ItemPropDTO, MainCategoryDTO} from 'src/redux/reducers/product';
-import useTheme from '_hooks/useTheme';
-import {width} from '_theme/Layout';
-import Text from '_atom/Text';
-import {Button} from '_atom/Button';
-import NavigationService from 'src/navigators/NavigationService';
-import {InputField} from '_molecule/Input';
-import Icon from '_atom/Icon';
-import {ConnectedProps, connect} from 'react-redux';
-import {RootState} from 'src/redux';
 import {deleteCategoryItem} from '_actions/product';
+import {Button} from '_atom/Button';
+import Icon from '_atom/Icon';
+import Text from '_atom/Text';
+import useTheme from '_hooks/useTheme';
+import {InputField} from '_molecule/Input';
+import {width} from '_theme/Layout';
+import React from 'react';
+import {Pressable, TouchableOpacity, View} from 'react-native';
 import {KeyboardAwareFlatList} from 'react-native-keyboard-aware-scroll-view';
+import {ConnectedProps, connect} from 'react-redux';
+import NavigationService from 'src/navigators/NavigationService';
+import {RootState} from 'src/redux';
+import {ItemPropDTO, MainCategoryDTO} from 'src/redux/reducers/product';
 
 const RenderEmptyItem = () => {
   const {Gutters, Colors, Layout} = useTheme();
@@ -41,8 +41,14 @@ const CategoryWrapper = ({
   }, [category]);
 
   const removeItem = item => {
-    console.log('item', item);
     _deleteCategoryItem(category?.id, item?.id);
+  };
+
+  const editItem = item => {
+    NavigationService.navigate('EditItemCategory', {
+      categoryConfig: category,
+      editableItem: item,
+    });
   };
 
   return (
@@ -107,17 +113,23 @@ const CategoryWrapper = ({
                         label={i?.value}
                         inputFieldStyle={Gutters.smallBMargin}
                         inputMode={i?.type}
+                        editable={false}
                         // onChangeText={val => onChangeText(val, item)}
                         value={item[i?.value]}
                       />
                     );
                   })}
                 </View>
-                <TouchableOpacity
-                  onPress={() => removeItem(item)}
-                  style={[Layout.center, Gutters.xlargeTMargin, {flex: 1}]}>
-                  <Icon name="trash-can" color={Colors.danger[500]} />
-                </TouchableOpacity>
+                <View style={[Layout.center, Gutters.xlargeTMargin, {flex: 1}]}>
+                  <TouchableOpacity onPress={() => removeItem(item)}>
+                    <Icon name="trash-can" color={Colors.danger[500]} />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => editItem(item)}
+                    style={Gutters.xlargeTMargin}>
+                    <Icon name="pencil" color={Colors.neutral[400]} />
+                  </TouchableOpacity>
+                </View>
               </View>
             );
           }}

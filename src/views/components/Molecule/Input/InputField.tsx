@@ -130,6 +130,7 @@ const InputField = ({
               setShowDate(true);
               // showDatePicker();
             }}
+            disabled={!props.editable}
             style={(inputStyles.inputContainer, {width: '100%'})}>
             <TextInput
               style={[
