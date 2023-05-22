@@ -1,6 +1,6 @@
-import {Pressable, View} from 'react-native';
+import {FlatList, Pressable, TouchableOpacity, View} from 'react-native';
 import React from 'react';
-import {MainCategoryDTO} from 'src/redux/reducers/product';
+import {ItemPropDTO, MainCategoryDTO} from 'src/redux/reducers/product';
 import useTheme from '_hooks/useTheme';
 import {width} from '_theme/Layout';
 import Text from '_atom/Text';
@@ -11,6 +11,7 @@ import Icon from '_atom/Icon';
 import {ConnectedProps, connect} from 'react-redux';
 import {RootState} from 'src/redux';
 import {deleteCategoryItem} from '_actions/product';
+import {KeyboardAwareFlatList} from 'react-native-keyboard-aware-scroll-view';
 
 const RenderEmptyItem = () => {
   const {Gutters, Colors, Layout} = useTheme();
@@ -29,14 +30,20 @@ const CategoryWrapper = ({
   const {_deleteCategoryItem} = props;
   const {Gutters, Colors, Layout} = useTheme();
 
+  const [inputData, setInputData] = React.useState<ItemPropDTO[]>([]);
+
   React.useEffect(() => {
     console.log('category', category);
   }, [category]);
 
-  const removeItem = React.useCallback(item => {
+  React.useEffect(() => {
+    setInputData(category?.properties);
+  }, [category]);
+
+  const removeItem = item => {
     console.log('item', item);
     _deleteCategoryItem(category?.id, item?.id);
-  }, []);
+  };
 
   return (
     <View style={Gutters.smallBMargin}>
@@ -76,56 +83,46 @@ const CategoryWrapper = ({
           borderBottomRightRadius: width * 0.03,
           backgroundColor: Colors.white,
         }}>
-        {category?.items?.length ? (
-          category?.items?.map(i => {
-            console.log('i', i);
+        <KeyboardAwareFlatList
+          data={category?.items}
+          keyExtractor={(item, index) => index.toString()}
+          extraData={[category, category?.items]}
+          renderItem={({item, index}) => {
             return (
               <View
                 style={[
                   Layout.row,
                   Layout.justifyContentBetween,
+                  Layout.alignItemsStart,
                   Gutters.smallPadding,
                   {
-                    alignItems: 'center',
                     borderBottomColor: Colors.neutral[300],
                     borderBottomWidth: 0.5,
                   },
                 ]}>
-                <InputField
-                  label="Category Name"
-                  value={'categoryName'}
-                  inputFieldStyle={{flex: 8}}
-                  // onChangeText={val => {
-                  //   setCategoryName(val);
-                  //   setInvalidCatName(false);
-                  // }}
-                />
-                <Pressable
-                  onPress={() => removeItem(i)}
-                  style={[Layout.center, {flex: 1}]}>
+                <View style={{flex: 8}}>
+                  {inputData?.map((i: ItemPropDTO) => {
+                    return (
+                      <InputField
+                        label={i?.value}
+                        inputFieldStyle={Gutters.smallBMargin}
+                        inputMode={i?.type}
+                        // onChangeText={val => onChangeText(val, item)}
+                        value={item[i?.value]}
+                      />
+                    );
+                  })}
+                </View>
+                <TouchableOpacity
+                  onPress={() => removeItem(item)}
+                  style={[Layout.center, Gutters.xlargeTMargin, {flex: 1}]}>
                   <Icon name="trash-can" color={Colors.danger[500]} />
-                </Pressable>
+                </TouchableOpacity>
               </View>
             );
-            // for (const [key, value] of Object.entries(i)) {
-            //   console.log(`key ${key}: ${value}`);
-            //   return (
-            //     <View
-            //       style={[
-            //         Gutters.smallPadding,
-            //         {
-            //           borderBottomColor: Colors.neutral[300],
-            //           borderBottomWidth: 0.5,
-            //         },
-            //       ]}>
-            //       <Text text={value} />
-            //     </View>
-            //   );
-            // }
-          })
-        ) : (
-          <RenderEmptyItem />
-        )}
+          }}
+          ListEmptyComponent={RenderEmptyItem}
+        />
       </View>
     </View>
   );

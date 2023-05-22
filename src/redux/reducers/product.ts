@@ -79,7 +79,8 @@ export default (
           const indexCtgrItem = cat?.items?.findIndex(
             item => item.id === payload.categoryItemId,
           );
-          if (indexCtgrItem) {
+
+          if (indexCtgrItem !== undefined) {
             const updatedCategoriesItem = [
               ...(<[]>cat?.items?.slice(0, indexCtgrItem)),
               ...(<[]>cat?.items?.slice(indexCtgrItem + 1)),
@@ -89,6 +90,7 @@ export default (
         }
         return cat;
       });
+
       return {
         ...state,
         mainCategories: updatedMainCat,
