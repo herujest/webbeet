@@ -15,10 +15,12 @@ export const RenderInputField = ({
   item,
   onRemove,
   onChangeValue,
+  defaultValue,
 }: {
   item: ItemPropDTO;
   onRemove: (item: any) => any;
   onChangeValue: (val: string) => any;
+  defaultValue?: string;
 }) => {
   const dropdownRef = React.useRef<any>();
   const {Colors, Gutters, Layout, Fonts, FontSize} = useTheme();
@@ -40,6 +42,9 @@ export const RenderInputField = ({
   React.useEffect(() => {
     setEditableItem(item);
     setCurrentType(item?.type?.toUpperCase());
+    if (defaultValue) {
+      setValue(defaultValue);
+    }
   }, [item]);
 
   React.useEffect(() => {

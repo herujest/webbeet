@@ -28,14 +28,16 @@ const CreateItemCategory = (
   }, []);
 
   const _backAction = () => {
-    if (!isEmptyObj(payloadItem)) {
-      const payload: any = {
-        id: uuidv4(),
-        ...payloadItem,
-      };
+    // if (!isEmptyObj(payloadItem)) {
+    const payload: any = {
+      id: uuidv4(),
+      ...payloadItem,
+    };
 
-      _addCategoryItem(category?.id, payload);
-    }
+    console.log('payload', payload);
+
+    // _addCategoryItem(category?.id, payload);
+    // }
 
     NavigationService.navigateBack();
     return true;

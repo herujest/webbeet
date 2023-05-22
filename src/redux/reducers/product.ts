@@ -43,6 +43,19 @@ export default (
       ];
 
       return {...state, mainCategories: updatedCategories};
+    case TYPES.PRODUCT.EDIT_CATEGORY:
+      const modifiedData = state.mainCategories.map(i => {
+        if (i.id === payload.id) {
+          i.name = payload.data?.name;
+          i.properties = payload?.data?.properties;
+        }
+        return i;
+      });
+
+      return {
+        ...state,
+        mainCategories: modifiedData,
+      };
     case TYPES.PRODUCT.ADD_CATEGORY_ITEM:
       const modifiedMainCategories = state.mainCategories.map(
         (i: MainCategoryDTO) => {

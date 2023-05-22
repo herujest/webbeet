@@ -1,1 +1,1 @@
-export {CreatePage} from './Category';
+export {CreatePage, EditPage} from './Category';

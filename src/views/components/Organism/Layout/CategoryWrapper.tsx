@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {Pressable, View} from 'react-native';
 import React from 'react';
 import {MainCategoryDTO} from 'src/redux/reducers/product';
 import useTheme from '_hooks/useTheme';
@@ -26,7 +26,7 @@ const CategoryWrapper = ({category}: {category: MainCategoryDTO}) => {
 
   return (
     <View style={Gutters.smallBMargin}>
-      <View
+      <Pressable
         style={[
           Layout.row,
           Layout.justifyContentBetween,
@@ -39,7 +39,8 @@ const CategoryWrapper = ({category}: {category: MainCategoryDTO}) => {
             borderBottomWidth: 0.5,
             borderBottomColor: Colors.neutral[500],
           },
-        ]}>
+        ]}
+        onPress={() => NavigationService.navigate('EditPage', {category})}>
         <Text
           text={category?.name}
           variant="bold"
@@ -54,7 +55,7 @@ const CategoryWrapper = ({category}: {category: MainCategoryDTO}) => {
           buttonBodyStyle={Gutters.smallRPadding}
           onPress={onAddNewItem}
         />
-      </View>
+      </Pressable>
       <View
         style={{
           borderBottomLeftRadius: width * 0.03,
