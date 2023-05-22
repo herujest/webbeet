@@ -1,4 +1,4 @@
-import {editCategory, setCategory} from '_actions/product';
+import {deleteCategory, editCategory, setCategory} from '_actions/product';
 import {Icon, Text} from '_atom/index';
 import {optionsType} from '_constant/app';
 import useTheme from '_hooks/useTheme';
@@ -102,7 +102,7 @@ const ListFooterComponent = ({
 };
 
 const EditPage = (props: CreatePageScreenProps & ReduxProps) => {
-  const {route, navigation, _editCategory} = props;
+  const {route, navigation, _editCategory, _deleteCategory} = props;
   const dropdownRef = React.useRef<any>();
   const titleRef = React.useRef<any>();
 
@@ -213,7 +213,18 @@ const EditPage = (props: CreatePageScreenProps & ReduxProps) => {
 
   return (
     <Container>
-      <HeaderTitle title="Edit Category" onPressLeftIcon={_backAction} />
+      <HeaderTitle
+        title="Edit Category"
+        onPressLeftIcon={_backAction}
+        rightIcon="trash-can"
+        rightIconColor={Colors.danger[500]}
+        onPressRightIcon={() => {
+          _deleteCategory(route?.params?.category?.id);
+          setTimeout(() => {
+            NavigationService.navigateBack();
+          }, 350);
+        }}
+      />
 
       <KeyboardAwareFlatList
         enableOnAndroid={true}
@@ -315,6 +326,7 @@ const mapStateToProps = ({product}: RootState) => ({
 const mapDispatchToProps = {
   _setCategory: setCategory,
   _editCategory: editCategory,
+  _deleteCategory: deleteCategory,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

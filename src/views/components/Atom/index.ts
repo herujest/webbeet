@@ -56,7 +56,8 @@ export type IconName =
   | 'filter'
   | 'plus'
   | 'minus'
-  | 'three-dots-vertical';
+  | 'three-dots-vertical'
+  | 'trash-can';
 
 export interface IconMap {
   name: string;

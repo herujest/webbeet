@@ -80,27 +80,14 @@ const CreateItemCategory = (
           })}
         </View>
         <Button
-          title="Edit"
+          title="Edit Properties"
           colors={Colors.danger[300]}
           onPress={() => {
             NavigationService.navigate(
-              'CreatePage',
-              {
-                editMode: true,
-                editableData: category,
-              },
-              `editProp_#${category?.id}`,
+              'EditPage',
+              {category},
+              `edit-${category?.id}`,
             );
-          }}
-        />
-        <Button
-          title="Remove"
-          colors={Colors.danger[700]}
-          onPress={() => {
-            _deleteCategory(category?.id);
-            setTimeout(() => {
-              NavigationService.navigateBack();
-            }, 350);
           }}
         />
       </Content>
