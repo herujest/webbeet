@@ -104,10 +104,15 @@ const ListFooterComponent = ({
 const CreatePage = (props: CreatePageScreenProps & ReduxProps) => {
   const {navigation, _setCategory} = props;
   const dropdownRef = React.useRef<any>();
-  const {Colors, Gutters} = useTheme();
+  const titleRef = React.useRef<any>();
+
+  const {Colors, Gutters, Layout, Fonts, FontSize} = useTheme();
 
   const [categoryName, setCategoryName] = React.useState<string>('');
+  const [selectedTitleName, setSelectedTitleName] =
+    React.useState<string>('Untitled Field');
   const [invalidCatName, setInvalidCatName] = React.useState<boolean>('');
+  const [titleFieldOpt, setTitleFieldOpt] = React.useState<string[]>([]);
   const [tempItemProp, setTempItemProp] = React.useState<ItemPropDTO[]>([
     {
       id: uuidv4(),
@@ -121,6 +126,12 @@ const CreatePage = (props: CreatePageScreenProps & ReduxProps) => {
     type: optionsType[0].toUpperCase(),
   });
 
+  React.useEffect(() => {
+    if (tempItemProp.length) {
+      setTitleFieldOpt(tempItemProp.map(i => i.value));
+    }
+  }, [tempItemProp]);
+
   const _backAction = () => {
     if (tempItemProp.length > 1 && !categoryName) {
       setInvalidCatName(true);
@@ -129,6 +140,7 @@ const CreatePage = (props: CreatePageScreenProps & ReduxProps) => {
         const payload: MainCategoryDTO = {
           id: uuidv4(),
           name: categoryName,
+          title: selectedTitleName,
           properties: tempItemProp,
         };
         _setCategory(payload);
@@ -237,12 +249,53 @@ const CreatePage = (props: CreatePageScreenProps & ReduxProps) => {
           );
         }}
         ListFooterComponent={
-          <ListFooterComponent
-            onAddNewField={onAddNewField}
-            onOpenDropdown={onOpenDropdown}
-            dropdownRef={dropdownRef}
-            onSelectDropdown={onSelect}
-          />
+          <>
+            <Pressable
+              onPress={() => titleRef.current.show}
+              style={[
+                Layout.row,
+                Layout.justifyContentBetween,
+                Gutters.smallPadding,
+                Gutters.smallTMargin,
+                {
+                  backgroundColor: Colors.white,
+                },
+              ]}>
+              <Text text={'Title Field:'} />
+              <ModalDropdown
+                ref={titleRef}
+                options={titleFieldOpt}
+                defaultValue={'Untitled Field'}
+                textStyle={[
+                  Fonts.normal,
+                  {fontSize: FontSize.sm, color: Colors.neutral[800]},
+                ]}
+                dropdownStyle={[
+                  Gutters.largeTMargin,
+                  {
+                    width: width * 0.7,
+                  },
+                ]}
+                dropdownTextStyle={[Fonts.normal, {fontSize: FontSize.sm}]}
+                dropdownTextHighlightStyle={[
+                  Fonts.semibold,
+                  {
+                    fontSize: FontSize.sm,
+                    color: Colors.secondary[700],
+                  },
+                ]}
+                onSelect={idx => setSelectedTitleName(titleFieldOpt[idx])}
+              />
+              <Icon name="circle-down" />
+            </Pressable>
+
+            <ListFooterComponent
+              onAddNewField={onAddNewField}
+              onOpenDropdown={onOpenDropdown}
+              dropdownRef={dropdownRef}
+              onSelectDropdown={onSelect}
+            />
+          </>
         }
       />
     </Container>

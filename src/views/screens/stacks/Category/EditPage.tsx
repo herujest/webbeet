@@ -102,12 +102,17 @@ const ListFooterComponent = ({
 };
 
 const EditPage = (props: CreatePageScreenProps & ReduxProps) => {
-  const {route, navigation, _setCategory, _editCategory} = props;
+  const {route, navigation, _editCategory} = props;
   const dropdownRef = React.useRef<any>();
-  const {Colors, Gutters} = useTheme();
+  const titleRef = React.useRef<any>();
+
+  const {Colors, Gutters, Layout, Fonts, FontSize} = useTheme();
 
   const [categoryName, setCategoryName] = React.useState<string>('');
+  const [selectedTitleName, setSelectedTitleName] =
+    React.useState<string>('Untitled Field');
   const [invalidCatName, setInvalidCatName] = React.useState<boolean>('');
+  const [titleFieldOpt, setTitleFieldOpt] = React.useState<string[]>([]);
   const [tempItemProp, setTempItemProp] = React.useState<ItemPropDTO[]>([
     {
       id: uuidv4(),
@@ -125,8 +130,15 @@ const EditPage = (props: CreatePageScreenProps & ReduxProps) => {
     if (route?.params) {
       setCategoryName(route?.params?.category?.name);
       setTempItemProp(route?.params?.category?.properties);
+      setSelectedTitleName(route?.params?.category?.title);
     }
   }, [route]);
+
+  React.useEffect(() => {
+    if (tempItemProp.length) {
+      setTitleFieldOpt(tempItemProp.map(i => i.value));
+    }
+  }, [tempItemProp]);
 
   const _backAction = () => {
     if (tempItemProp.length > 1 && !categoryName) {
@@ -135,6 +147,7 @@ const EditPage = (props: CreatePageScreenProps & ReduxProps) => {
       _editCategory(route?.params?.category?.id, {
         name: categoryName,
         properties: tempItemProp,
+        title: selectedTitleName,
       });
       NavigationService.navigateAndReset('Drawer');
     }
@@ -239,12 +252,56 @@ const EditPage = (props: CreatePageScreenProps & ReduxProps) => {
           );
         }}
         ListFooterComponent={
-          <ListFooterComponent
-            onAddNewField={onAddNewField}
-            onOpenDropdown={onOpenDropdown}
-            dropdownRef={dropdownRef}
-            onSelectDropdown={onSelect}
-          />
+          <>
+            <Pressable
+              onPress={() => titleRef.current.show}
+              style={[
+                Layout.row,
+                Layout.justifyContentBetween,
+                Gutters.smallPadding,
+                Gutters.smallTMargin,
+                {
+                  backgroundColor: Colors.white,
+                },
+              ]}>
+              <Text text={'Title Field:'} />
+              <ModalDropdown
+                ref={titleRef}
+                options={titleFieldOpt}
+                defaultValue={
+                  selectedTitleName === 0
+                    ? titleFieldOpt[selectedTitleName]
+                    : selectedTitleName
+                }
+                textStyle={[
+                  Fonts.normal,
+                  {fontSize: FontSize.sm, color: Colors.neutral[800]},
+                ]}
+                dropdownStyle={[
+                  Gutters.largeTMargin,
+                  {
+                    width: width * 0.7,
+                  },
+                ]}
+                dropdownTextStyle={[Fonts.normal, {fontSize: FontSize.sm}]}
+                dropdownTextHighlightStyle={[
+                  Fonts.semibold,
+                  {
+                    fontSize: FontSize.sm,
+                    color: Colors.secondary[700],
+                  },
+                ]}
+                onSelect={idx => setSelectedTitleName(titleFieldOpt[idx])}
+              />
+              <Icon name="circle-down" />
+            </Pressable>
+            <ListFooterComponent
+              onAddNewField={onAddNewField}
+              onOpenDropdown={onOpenDropdown}
+              dropdownRef={dropdownRef}
+              onSelectDropdown={onSelect}
+            />
+          </>
         }
       />
     </Container>

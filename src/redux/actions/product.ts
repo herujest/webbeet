@@ -1,5 +1,10 @@
 import {TYPES} from '../actionTypes';
 
+export const setCategoryTitleField = (payload: any) => ({
+  type: TYPES.PRODUCT.SET_CATEGORY_TITLE_FIELD,
+  payload,
+});
+
 export const setCategory = (payload: any) => ({
   type: TYPES.PRODUCT.SET_CATEGORY,
   payload,

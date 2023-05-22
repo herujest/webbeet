@@ -16,6 +16,7 @@ export type ItemPropDTO = {
 export type MainCategoryDTO = {
   id: string;
   name: string;
+  title?: string;
   properties: ItemPropDTO[];
   items?: any[];
 };
@@ -48,6 +49,7 @@ export default (
         if (i.id === payload.id) {
           i.name = payload.data?.name;
           i.properties = payload?.data?.properties;
+          i.title = payload.data?.title;
         }
         return i;
       });
