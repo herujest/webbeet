@@ -24,3 +24,11 @@ export const addCategoryItem = (categoryId: number, payload: any) => ({
   type: TYPES.PRODUCT.ADD_CATEGORY_ITEM,
   payload: {id: categoryId, data: payload},
 });
+
+export const deleteCategoryItem = (
+  categoryId: string,
+  categoryItemId: string,
+) => ({
+  type: TYPES.PRODUCT.DELETE_CATEGORY_ITEM,
+  payload: {categoryId, categoryItemId},
+});

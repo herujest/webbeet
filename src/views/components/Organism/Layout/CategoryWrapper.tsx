@@ -6,6 +6,11 @@ import {width} from '_theme/Layout';
 import Text from '_atom/Text';
 import {Button} from '_atom/Button';
 import NavigationService from 'src/navigators/NavigationService';
+import {InputField} from '_molecule/Input';
+import Icon from '_atom/Icon';
+import {ConnectedProps, connect} from 'react-redux';
+import {RootState} from 'src/redux';
+import {deleteCategoryItem} from '_actions/product';
 
 const RenderEmptyItem = () => {
   const {Gutters, Colors, Layout} = useTheme();
@@ -17,12 +22,21 @@ const RenderEmptyItem = () => {
   );
 };
 
-const CategoryWrapper = ({category}: {category: MainCategoryDTO}) => {
+const CategoryWrapper = ({
+  category,
+  ...props
+}: {category: MainCategoryDTO} & ReduxProps) => {
+  const {_deleteCategoryItem} = props;
   const {Gutters, Colors, Layout} = useTheme();
 
   React.useEffect(() => {
     console.log('category', category);
   }, [category]);
+
+  const removeItem = React.useCallback(item => {
+    console.log('item', item);
+    _deleteCategoryItem(category?.id, item?.id);
+  }, []);
 
   return (
     <View style={Gutters.smallBMargin}>
@@ -64,11 +78,50 @@ const CategoryWrapper = ({category}: {category: MainCategoryDTO}) => {
         }}>
         {category?.items?.length ? (
           category?.items?.map(i => {
+            console.log('i', i);
             return (
-              <View>
-                <Text text="name" />
+              <View
+                style={[
+                  Layout.row,
+                  Layout.justifyContentBetween,
+                  Gutters.smallPadding,
+                  {
+                    alignItems: 'center',
+                    borderBottomColor: Colors.neutral[300],
+                    borderBottomWidth: 0.5,
+                  },
+                ]}>
+                <InputField
+                  label="Category Name"
+                  value={'categoryName'}
+                  inputFieldStyle={{flex: 8}}
+                  // onChangeText={val => {
+                  //   setCategoryName(val);
+                  //   setInvalidCatName(false);
+                  // }}
+                />
+                <Pressable
+                  onPress={() => removeItem(i)}
+                  style={[Layout.center, {flex: 1}]}>
+                  <Icon name="trash-can" color={Colors.danger[500]} />
+                </Pressable>
               </View>
             );
+            // for (const [key, value] of Object.entries(i)) {
+            //   console.log(`key ${key}: ${value}`);
+            //   return (
+            //     <View
+            //       style={[
+            //         Gutters.smallPadding,
+            //         {
+            //           borderBottomColor: Colors.neutral[300],
+            //           borderBottomWidth: 0.5,
+            //         },
+            //       ]}>
+            //       <Text text={value} />
+            //     </View>
+            //   );
+            // }
           })
         ) : (
           <RenderEmptyItem />
@@ -84,4 +137,15 @@ const CategoryWrapper = ({category}: {category: MainCategoryDTO}) => {
   }
 };
 
-export default CategoryWrapper;
+const mapStateToProps = ({product}: RootState) => ({
+  mainCategories: product.mainCategories,
+});
+
+const mapDispatchToProps = {
+  _deleteCategoryItem: deleteCategoryItem,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type ReduxProps = ConnectedProps<typeof connector>;
+export default connector(CategoryWrapper);

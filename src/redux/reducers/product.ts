@@ -73,7 +73,26 @@ export default (
       );
 
       return {...state, mainCategories: modifiedMainCategories};
-    // return {...state, mainCategories: modifiedMainCategories};
+    case TYPES.PRODUCT.DELETE_CATEGORY_ITEM:
+      const updatedMainCat = state.mainCategories.map(cat => {
+        if (cat.id === payload?.categoryId) {
+          const indexCtgrItem = cat?.items?.findIndex(
+            item => item.id === payload.categoryItemId,
+          );
+          if (indexCtgrItem) {
+            const updatedCategoriesItem = [
+              ...(<[]>cat?.items?.slice(0, indexCtgrItem)),
+              ...(<[]>cat?.items?.slice(indexCtgrItem + 1)),
+            ];
+            cat.items = updatedCategoriesItem;
+          }
+        }
+        return cat;
+      });
+      return {
+        ...state,
+        mainCategories: updatedMainCat,
+      };
     default:
       return state;
   }

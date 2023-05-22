@@ -28,16 +28,14 @@ const CreateItemCategory = (
   }, []);
 
   const _backAction = () => {
-    // if (!isEmptyObj(payloadItem)) {
-    const payload: any = {
-      id: uuidv4(),
-      ...payloadItem,
-    };
+    if (!isEmptyObj(payloadItem)) {
+      const payload: any = {
+        id: uuidv4(),
+        ...payloadItem,
+      };
 
-    console.log('payload', payload);
-
-    // _addCategoryItem(category?.id, payload);
-    // }
+      _addCategoryItem(category?.id, payload);
+    }
 
     NavigationService.navigateBack();
     return true;
@@ -65,7 +63,12 @@ const CreateItemCategory = (
     <Container>
       <HeaderTitle title={category?.name} onPressLeftIcon={_backAction} />
 
-      <Content contentContainerStyle={Gutters.smallTMargin}>
+      <Content
+        contentContainerStyle={Gutters.smallTMargin}
+        enableOnAndroid={true}
+        contentInsetAdjustmentBehavior="always"
+        extraHeight={300}
+        enableAutomaticScroll>
         <View style={[Gutters.largePadding, {backgroundColor: Colors.white}]}>
           {inputData?.map((item: ItemPropDTO) => {
             return (
