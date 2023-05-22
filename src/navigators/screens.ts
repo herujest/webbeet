@@ -53,6 +53,7 @@ export type RootStackParamList = {
 export type RootDrawerParamList = {
   Tabs: undefined;
   Stacks: undefined;
+  DrawerItemPage: {pageData: MainCategoryDTO};
 };
 
 export type RootTabsParamList = {

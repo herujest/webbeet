@@ -8,6 +8,8 @@ import {RootDrawerParamList} from './screens';
 import TabNavigator from './tabNavigator';
 import {useSelector} from 'react-redux';
 import {MainCategoryDTO} from 'src/redux/reducers/product';
+import NavigationService from './NavigationService';
+import {DrawerItemPage} from 'src/views/screens/drawer';
 
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
 
@@ -21,14 +23,16 @@ export default function DrawerNavigator() {
       <DrawerContentScrollView {...props}>
         <DrawerItem
           label="Dashboard"
-          onPress={() => props.navigation?.closeDrawer()}
+          onPress={() => NavigationService.navigate('Tabs')}
         />
         {listItemMenu?.map((category: MainCategoryDTO, index: number) => {
           return (
             <DrawerItem
               key={index}
               label={category?.name}
-              onPress={() => console.log('pressed')}
+              onPress={() =>
+                NavigationService.navigate('DrawerItemPage', {category})
+              }
             />
           );
         })}
@@ -48,6 +52,7 @@ export default function DrawerNavigator() {
         headerShown: false,
       }}>
       <Drawer.Screen name={'Tabs'} component={TabNavigator} />
+      <Drawer.Screen name="DrawerItemPage" component={DrawerItemPage} />
     </Drawer.Navigator>
   );
 }

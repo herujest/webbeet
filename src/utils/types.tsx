@@ -48,3 +48,11 @@ export type CreateItemCategoryScreenProps = CompositeScreenProps<
     DrawerScreenProps<RootDrawerParamList>
   >
 >;
+
+export type DrawerItemPageScreenProps = CompositeScreenProps<
+  DrawerScreenProps<RootDrawerParamList, 'DrawerItemPage'>,
+  CompositeScreenProps<
+    BottomTabScreenProps<RootTabsParamList>,
+    NativeStackScreenProps<RootStackParamList, 'CreateItemCategory'>
+  >
+>;
